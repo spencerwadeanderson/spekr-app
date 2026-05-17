@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spekr — Your Words. Any Vibe.</title>
+  <meta name="description" content="Translate any text into 29+ hilarious vibes. Gen Z, CEO, Shakespeare, Villain, Passive Aggressive and more. Coming to the App Store.">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#0A0F0A; font-family:'Courier New',Courier,monospace; color:#AACCAA; overflow-x:hidden; }
+
+    .nav { display:flex; justify-content:space-between; align-items:center; padding:14px 40px; border-bottom:1px solid #1E2E1E; background:rgba(10,15,10,0.97); position:sticky; top:0; z-index:100; }
+    .nav-brand { font-size:18px; font-weight:900; color:#00FF88; letter-spacing:4px; }
+    .nav-links { display:flex; gap:12px; }
+    .nav-btn { font-family:'Courier New',monospace; font-size:9px; font-weight:700; color:#4A6A4A; letter-spacing:2px; border:1px solid #1E2E1E; border-radius:2px; padding:8px 14px; cursor:pointer; background:transparent; transition:all 0.2s; text-decoration:none; display:inline-block; }
+    .nav-btn:hover { color:#00FF88; border-color:#00FF88; background:#1A3A2A; }
+    .nav-btn.primary { color:#00FF88; border-color:#00FF88; background:#1A3A2A; }
+    .nav-btn.primary:hover { background:#00FF88; color:#0A0F0A; }
+
+    .hero { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:120px 20px 80px; text-align:center; position:relative; overflow:hidden; }
+    .hero-grid { position:absolute; top:0;left:0;right:0;bottom:0; background-image:linear-gradient(#1E2E1E 1px,transparent 1px),linear-gradient(90deg,#1E2E1E 1px,transparent 1px); background-size:60px 60px; opacity:0.35; pointer-events:none; }
+    .hero-glow { position:absolute; width:700px; height:700px; border-radius:50%; background:radial-gradient(circle,rgba(0,255,136,0.05) 0%,transparent 70%); top:50%;left:50%; transform:translate(-50%,-50%); pointer-events:none; }
+    .status-row { display:flex; align-items:center; gap:8px; margin-bottom:28px; position:relative; }
+    .dot { width:8px; height:8px; border-radius:50%; background:#00FF88; animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .status-txt { font-size:10px; color:#00AA55; letter-spacing:3px; font-weight:700; }
+    .hero-title { font-size:clamp(80px,16vw,140px); font-weight:900; color:#00FF88; letter-spacing:8px; line-height:1; margin-bottom:16px; position:relative; animation:glitch 10s infinite; }
+    @keyframes glitch { 0%,94%,100%{text-shadow:none} 95%{text-shadow:3px 0 #ff0044,-3px 0 #00ffff} 96%{text-shadow:-3px 0 #ff0044,3px 0 #00ffff} 97%{text-shadow:none} }
+    .hero-tag { font-size:14px; color:#4A6A4A; letter-spacing:3px; margin-bottom:28px; position:relative; }
+    .hero-desc { font-size:15px; color:#AACCAA; max-width:560px; line-height:1.9; margin-bottom:44px; position:relative; }
+    .social-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; position:relative; }
+    .social-btn { font-family:'Courier New',monospace; font-size:11px; font-weight:700; letter-spacing:2px; color:#00FF88; border:1px solid #00FF88; background:#1A3A2A; padding:14px 28px; border-radius:3px; cursor:pointer; transition:all 0.2s; text-decoration:none; }
+    .social-btn:hover { background:#00FF88; color:#0A0F0A; }
+    .social-btn.dim { color:#4A6A4A; border-color:#1E2E1E; background:#111811; }
+    .social-btn.dim:hover { color:#AACCAA; border-color:#4A6A4A; }
+
+    .section { padding:80px 40px; max-width:960px; margin:0 auto; }
+    .section-full { padding:80px 40px; }
+    .section-label { font-size:9px; color:#00AA55; letter-spacing:4px; font-weight:700; margin-bottom:14px; display:flex; align-items:center; gap:12px; }
+    .section-label::after { content:''; flex:1; height:1px; background:#1E2E1E; }
+    .section-title { font-size:clamp(28px,5vw,44px); font-weight:900; color:#00FF88; letter-spacing:2px; margin-bottom:10px; }
+    .section-sub { font-size:13px; color:#6A9A6A; line-height:1.9; margin-bottom:36px; max-width:560px; }
+
+    .demo-card { background:#111811; border:1px solid #1E2E1E; border-radius:4px; margin-bottom:12px; }
+    .demo-hdr { display:flex; justify-content:space-between; padding:9px 14px; border-bottom:1px solid #1E2E1E; }
+    .demo-lbl { font-size:8px; color:#00AA55; letter-spacing:2px; font-weight:700; }
+    .demo-text { padding:14px; font-size:13px; color:#4A6A4A; font-style:italic; line-height:1.7; }
+    .vibe-tabs { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:14px; }
+    .vibe-tab { font-family:'Courier New',monospace; font-size:8px; font-weight:700; letter-spacing:1px; color:#4A6A4A; border:1px solid #1E2E1E; background:#111811; padding:7px 13px; border-radius:2px; cursor:pointer; transition:all 0.15s; }
+    .vibe-tab:hover { color:#AACCAA; border-color:#4A6A4A; }
+    .vibe-tab.active { color:#00FF88; border-color:#00FF88; background:#1A3A2A; }
+    .result-box { background:#111811; border:1px solid #00FF88; border-radius:4px; padding:18px; min-height:80px; }
+    .result-lbl { font-size:8px; color:#00AA55; letter-spacing:2px; font-weight:700; margin-bottom:10px; }
+    .result-txt { font-size:13px; color:#AACCAA; line-height:1.8; }
+    .cursor { display:inline-block; width:2px; height:13px; background:#00FF88; animation:blink 1s infinite; vertical-align:middle; margin-left:2px; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    .marquee-section { padding:50px 0; background:#111811; border-top:1px solid #1E2E1E; border-bottom:1px solid #1E2E1E; overflow:hidden; position:relative; }
+    .marquee-section::before,.marquee-section::after { content:''; position:absolute; top:0; bottom:0; width:80px; z-index:2; }
+    .marquee-section::before { left:0; background:linear-gradient(90deg,#111811,transparent); }
+    .marquee-section::after { right:0; background:linear-gradient(-90deg,#111811,transparent); }
+    .marquee { display:flex; gap:14px; animation:scroll 28s linear infinite; width:max-content; }
+    .marquee:hover { animation-play-state:paused; }
+    @keyframes scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .mitem { background:#0A0F0A; border:1px solid #1E2E1E; border-radius:3px; padding:14px 18px; width:260px; flex-shrink:0; }
+    .mitem-txt { font-size:11px; color:#AACCAA; line-height:1.7; margin-bottom:8px; font-style:italic; }
+    .mitem-vibe { font-size:8px; color:#00AA55; letter-spacing:2px; font-weight:700; }
+
+    .vibes-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; margin-top:28px; }
+    .vcard { background:#111811; border:1px solid #1E2E1E; border-radius:3px; padding:12px; transition:all 0.2s; }
+    .vcard:hover { border-color:#00AA55; transform:translateY(-1px); }
+    .vcard-name { font-size:9px; font-weight:700; color:#AACCAA; letter-spacing:0.5px; margin-bottom:4px; }
+    .vcard-desc { font-size:9px; color:#4A6A4A; }
+    .vcard.locked { opacity:0.35; }
+
+    .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:28px; }
+    .fcard { background:#111811; border:1px solid #1E2E1E; border-radius:4px; padding:22px; transition:border-color 0.2s; }
+    .fcard:hover { border-color:#00AA55; }
+    .fcard-icon { font-size:22px; margin-bottom:10px; }
+    .fcard-title { font-size:11px; font-weight:700; color:#00FF88; letter-spacing:2px; margin-bottom:8px; }
+    .fcard-desc { font-size:11px; color:#6A9A6A; line-height:1.8; }
+
+    .streak-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:28px; }
+    .sitem { border:1px solid #1E2E1E; border-radius:3px; padding:12px 16px; background:#111811; display:flex; align-items:center; gap:10px; transition:border-color 0.2s; }
+    .sitem:hover { border-color:#00AA55; }
+    .sitem.special { border-color:rgba(0,255,136,0.25); }
+    .sday { font-size:10px; font-weight:700; color:#00FF88; letter-spacing:1px; }
+    .svibe { font-size:10px; color:#4A6A4A; }
+
+    .pricing-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:28px; }
+    .pcard { background:#111811; border:1px solid #1E2E1E; border-radius:4px; padding:26px; }
+    .pcard.featured { border-color:#00FF88; position:relative; }
+    .pbadge { position:absolute; top:-11px; left:50%; transform:translateX(-50%); background:#00FF88; color:#0A0F0A; font-size:8px; font-weight:700; letter-spacing:2px; padding:4px 12px; border-radius:2px; white-space:nowrap; }
+    .ptier { font-size:9px; color:#00AA55; letter-spacing:3px; font-weight:700; margin-bottom:10px; }
+    .pprice { font-size:36px; font-weight:900; color:#00FF88; margin-bottom:2px; }
+    .pperiod { font-size:10px; color:#4A6A4A; margin-bottom:16px; }
+    .pdiv { height:1px; background:#1E2E1E; margin:14px 0; }
+    .pfeat { font-size:11px; color:#6A9A6A; line-height:2; }
+    .pfeat .dim { color:#4A6A4A; }
+    .pfeat .highlight { color:#00FF88; }
+    .pbtn { display:block; width:100%; margin-top:18px; font-family:'Courier New',monospace; font-size:10px; font-weight:700; letter-spacing:2px; color:#00FF88; border:1px solid #00FF88; background:#1A3A2A; padding:12px; border-radius:3px; cursor:pointer; text-align:center; text-decoration:none; transition:all 0.2s; }
+    .pbtn:hover { background:#00FF88; color:#0A0F0A; }
+    .pbtn.sec { color:#4A6A4A; border-color:#1E2E1E; background:#0A0F0A; }
+    .pbtn.sec:hover { color:#AACCAA; border-color:#4A6A4A; }
+
+    .cta-section { padding:100px 20px; text-align:center; position:relative; overflow:hidden; }
+    .cta-section .hero-grid { opacity:0.2; }
+
+    footer { border-top:1px solid #1E2E1E; padding:36px 40px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+    .footer-brand { font-size:16px; font-weight:900; color:#00FF88; letter-spacing:4px; }
+    .footer-tag { font-size:9px; color:#4A6A4A; letter-spacing:2px; margin-top:4px; }
+    .footer-links { display:flex; gap:20px; flex-wrap:wrap; }
+    .footer-link { font-size:9px; color:#4A6A4A; letter-spacing:1px; text-decoration:none; transition:color 0.2s; }
+    .footer-link:hover { color:#00AA55; }
+
+    @media(max-width:600px) {
+      .nav { padding:12px 20px; }
+      .nav-links { gap:8px; }
+      .hero { padding:100px 20px 60px; }
+      .section,.section-full { padding:60px 20px; }
+      footer { padding:32px 20px; }
+      .footer-links { gap:14px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">SPEKR</div>
+  <div class="nav-links">
+    <a href="https://tiktok.com/@spekrapp" target="_blank" class="nav-btn">▶ TIKTOK</a>
+    <a href="https://instagram.com/spekrapp" target="_blank" class="nav-btn primary">◈ INSTAGRAM</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="status-row">
+    <div class="dot"></div>
+    <span class="status-txt">COMING TO THE APP STORE</span>
+  </div>
+  <h1 class="hero-title">SPEKR</h1>
+  <p class="hero-tag">// your words. any vibe.</p>
+  <p class="hero-desc">Translate any text into 29+ hilarious vibes instantly.<br>Gen Z, CEO, Shakespeare, Villain, Passive Aggressive and more.<br>Daily challenges. Streak unlocks. God Mode at 100 days.</p>
+  <div class="social-btns">
+    <a href="https://tiktok.com/@spekrapp" target="_blank" class="social-btn">▶ FOLLOW ON TIKTOK</a>
+    <a href="https://instagram.com/spekrapp" target="_blank" class="social-btn">◈ FOLLOW ON INSTAGRAM</a>
+    <a href="#" class="social-btn dim">🍎 COMING SOON — APP STORE</a>
+  </div>
+</section>
+
+<div style="background:#111811;border-top:1px solid #1E2E1E;border-bottom:1px solid #1E2E1E;">
+  <div class="section">
+    <div class="section-label">LIVE DEMO</div>
+    <h2 class="section-title">SEE IT IN ACTION</h2>
+    <p class="section-sub">Pick a vibe. Watch the transformation happen.</p>
+    <div class="demo-card">
+      <div class="demo-hdr"><span class="demo-lbl">INPUT_TEXT</span></div>
+      <div class="demo-text">"I need a day off work. I'm exhausted and I can't focus on anything."</div>
+    </div>
+    <div class="vibe-tabs">
+      <button class="vibe-tab active" onclick="selectVibe(this,0)">GEN Z</button>
+      <button class="vibe-tab" onclick="selectVibe(this,1)">PASSIVE AGG.</button>
+      <button class="vibe-tab" onclick="selectVibe(this,2)">SHAKESPEARE</button>
+      <button class="vibe-tab" onclick="selectVibe(this,3)">CEO</button>
+      <button class="vibe-tab" onclick="selectVibe(this,4)">VILLAIN</button>
+      <button class="vibe-tab" onclick="selectVibe(this,5)">THERAPIST</button>
+      <button class="vibe-tab" onclick="selectVibe(this,6)">TODDLER</button>
+      <button class="vibe-tab" onclick="selectVibe(this,7)">PIRATE</button>
+    </div>
+    <div class="result-box">
+      <div class="result-lbl" id="rlbl">OUTPUT_GEN_Z</div>
+      <div class="result-txt" id="rtxt"></div>
+    </div>
+  </div>
+</div>
+
+<section class="marquee-section">
+  <div class="marquee">
+    <div class="mitem"><div class="mitem-txt">"bestie i am literally running on fumes rn no cap 💀 my brain has fully left the chat"</div><div class="mitem-vibe">GEN Z VIBE</div></div>
+    <div class="mitem"><div class="mitem-txt">"Per my last email, I just wanted to circle back. No worries at all! 🙂"</div><div class="mitem-vibe">PASSIVE AGGRESSIVE</div></div>
+    <div class="mitem"><div class="mitem-txt">"Hark! Mine weary bones doth cry for respite. I prithee, grant me leave forthwith."</div><div class="mitem-vibe">SHAKESPEARE VIBE</div></div>
+    <div class="mitem"><div class="mitem-txt">"I'm strategically reallocating cognitive bandwidth for optimal recovery and performance."</div><div class="mitem-vibe">CEO VIBE</div></div>
+    <div class="mitem"><div class="mitem-txt">"FOOL! You dare demand my presence?! I will NOT be constrained by your calendar! MWAHAHAHA."</div><div class="mitem-vibe">VILLAIN VIBE</div></div>
+    <div class="mitem"><div class="mitem-txt">"I'm hearing that your body is sending you some really important signals right now."</div><div class="mitem-vibe">THERAPIST VIBE</div></div>
+    <div class="mitem"><div class="mitem-txt">"bestie i am literally running on fumes rn no cap 💀 my brain has fully left the chat"</div><div class="mitem-vibe">GEN Z VIBE</div></div>
+    <div class="mitem"><div class="mitem-txt">"Per my last email, I just wanted to circle back. No worries at all! 🙂"</div><div class="mitem-vibe">PASSIVE AGGRESSIVE</div></div>
+    <div class="mitem"><div class="mitem-txt">"Hark! Mine weary bones doth cry for respite. I prithee, grant me leave forthwith."</div><div class="mitem-vibe">SHAKESPEARE VIBE</div></div>
+    <div class="mitem"><div class="mitem-txt">"I'm strategically reallocating cognitive bandwidth for optimal recovery and performance."</div><div class="mitem-vibe">CEO VIBE</div></div>
+    <div class="mitem"><div class="mitem-txt">"FOOL! You dare demand my presence?! I will NOT be constrained by your calendar! MWAHAHAHA."</div><div class="mitem-vibe">VILLAIN VIBE</div></div>
+    <div class="mitem"><div class="mitem-txt">"I'm hearing that your body is sending you some really important signals right now."</div><div class="mitem-vibe">THERAPIST VIBE</div></div>
+  </div>
+</section>
+
+<div class="section">
+  <div class="section-label">THE VIBES</div>
+  <h2 class="section-title">29+ VIBES TO CHOOSE FROM</h2>
+  <p class="section-sub">Every vibe you need and some you didn't know you needed.</p>
+  <div class="vibes-grid">
+    <div class="vcard"><div class="vcard-name">GEN Z</div><div class="vcard-desc">no cap, fr fr</div></div>
+    <div class="vcard"><div class="vcard-name">CORPORATE</div><div class="vcard-desc">synergy achieved</div></div>
+    <div class="vcard"><div class="vcard-name">CEO</div><div class="vcard-desc">disrupt everything</div></div>
+    <div class="vcard"><div class="vcard-name">PASSIVE AGG.</div><div class="vcard-desc">bless your heart 🙂</div></div>
+    <div class="vcard"><div class="vcard-name">SHAKESPEARE</div><div class="vcard-desc">hark! a message</div></div>
+    <div class="vcard"><div class="vcard-name">PIRATE</div><div class="vcard-desc">arr, ye landlubber</div></div>
+    <div class="vcard"><div class="vcard-name">THERAPIST</div><div class="vcard-desc">I hear you saying...</div></div>
+    <div class="vcard"><div class="vcard-name">HYPE BEAST</div><div class="vcard-desc">THIS IS EVERYTHING</div></div>
+    <div class="vcard"><div class="vcard-name">TODDLER</div><div class="vcard-desc">but whyyyyy</div></div>
+    <div class="vcard"><div class="vcard-name">VILLAIN</div><div class="vcard-desc">mwahahaha</div></div>
+    <div class="vcard"><div class="vcard-name">KAREN</div><div class="vcard-desc">speak to manager</div></div>
+    <div class="vcard"><div class="vcard-name">BOOMER</div><div class="vcard-desc">back in my day</div></div>
+    <div class="vcard"><div class="vcard-name">LINKEDIN BRO</div><div class="vcard-desc">humbled and honored</div></div>
+    <div class="vcard"><div class="vcard-name">CAVEMAN</div><div class="vcard-desc">ugh. fire good.</div></div>
+    <div class="vcard"><div class="vcard-name">FORTUNE COOKIE</div><div class="vcard-desc">wise. vague. snappy.</div></div>
+    <div class="vcard"><div class="vcard-name">INFOMERCIAL</div><div class="vcard-desc">but wait, there's more!</div></div>
+    <div class="vcard"><div class="vcard-name">VALLEY GIRL</div><div class="vcard-desc">like, oh my god</div></div>
+    <div class="vcard"><div class="vcard-name">CONSPIRACY</div><div class="vcard-desc">...or is it?</div></div>
+    <div class="vcard locked"><div class="vcard-name">🔒 AUCTIONEER</div><div class="vcard-desc">3 day streak</div></div>
+    <div class="vcard locked"><div class="vcard-name">🔒 MEDIEVAL PEASANT</div><div class="vcard-desc">7 day streak</div></div>
+    <div class="vcard locked"><div class="vcard-name">🔒 FOUNDING FATHER</div><div class="vcard-desc">14 day streak</div></div>
+    <div class="vcard locked"><div class="vcard-name">🔒 THE ORACLE</div><div class="vcard-desc">30 day streak</div></div>
+    <div class="vcard locked"><div class="vcard-name">🔒 ALIEN DIPLOMAT</div><div class="vcard-desc">60 day streak</div></div>
+    <div class="vcard locked" style="border-color:rgba(0,255,136,0.15)"><div class="vcard-name" style="color:rgba(0,255,136,0.3)">👁️ GOD MODE</div><div class="vcard-desc">100 day streak</div></div>
+  </div>
+</div>
+
+<div style="background:#111811;border-top:1px solid #1E2E1E;border-bottom:1px solid #1E2E1E;">
+  <div class="section">
+    <div class="section-label">FEATURES</div>
+    <h2 class="section-title">EVERYTHING YOU NEED</h2>
+    <div class="features-grid">
+      <div class="fcard"><div class="fcard-icon">✦</div><div class="fcard-title">INSTANT TRANSLATION</div><div class="fcard-desc">Paste any text and watch it transform in seconds. Emails, texts, tweets — any text. Any vibe.</div></div>
+      <div class="fcard"><div class="fcard-icon">⊞</div><div class="fcard-title">BATCH MODE</div><div class="fcard-desc">Translate one text into all vibes at once and compare them side by side. Built for TikTok.</div></div>
+      <div class="fcard"><div class="fcard-icon">🔥</div><div class="fcard-title">DAILY CHALLENGE</div><div class="fcard-desc">A new writing challenge every day. Build your streak. Unlock exclusive vibes that money can't buy.</div></div>
+      <div class="fcard"><div class="fcard-icon">✎</div><div class="fcard-title">CUSTOM VIBES</div><div class="fcard-desc">Describe any personality and Spekr creates a custom vibe just for you. "Write like my Southern grandmother." Done.</div></div>
+      <div class="fcard"><div class="fcard-icon">◷</div><div class="fcard-title">HISTORY</div><div class="fcard-desc">Every translation is saved automatically. Go back to your funniest results anytime.</div></div>
+      <div class="fcard"><div class="fcard-icon">📱</div><div class="fcard-title">SHARE TO TIKTOK</div><div class="fcard-desc">Generate a share card and post directly to TikTok or Instagram. Your translations are content.</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">STREAK SYSTEM</div>
+  <h2 class="section-title">EARN YOUR VIBES</h2>
+  <p class="section-sub">The best vibes can't be bought. Complete the daily challenge and unlock exclusive vibes no one else has — unless they've put in the work.</p>
+  <div class="streak-row">
+    <div class="sitem"><span>🔥</span><span class="sday">3 DAYS</span><span class="svibe">→ Auctioneer</span></div>
+    <div class="sitem"><span>🔥</span><span class="sday">7 DAYS</span><span class="svibe">→ Medieval Peasant</span></div>
+    <div class="sitem"><span>🔥</span><span class="sday">14 DAYS</span><span class="svibe">→ Founding Father</span></div>
+    <div class="sitem"><span>🔥</span><span class="sday">30 DAYS</span><span class="svibe">→ The Oracle</span></div>
+    <div class="sitem"><span>🔥</span><span class="sday">60 DAYS</span><span class="svibe">→ Alien Diplomat</span></div>
+    <div class="sitem special"><span>👁️</span><span class="sday" style="color:rgba(0,255,136,0.7)">100 DAYS</span><span class="svibe">→ GOD MODE</span></div>
+  </div>
+</div>
+
+<div style="background:#111811;border-top:1px solid #1E2E1E;border-bottom:1px solid #1E2E1E;">
+  <div class="section">
+    <div class="section-label">PRICING</div>
+    <h2 class="section-title">FREE TO START</h2>
+    <p class="section-sub">Download free. Translate 10 times a day. Upgrade when you're obsessed.</p>
+    <div class="pricing-grid">
+      <div class="pcard">
+        <div class="ptier">FREE</div>
+        <div class="pprice">$0</div>
+        <div class="pperiod">forever</div>
+        <div class="pdiv"></div>
+        <div class="pfeat">
+          ✦ 10 translations per day<br>
+          ✦ All 29+ vibes<br>
+          ✦ Daily challenge + streak<br>
+          ✦ 3 custom vibes<br>
+          <span class="dim">◌ Watermarked share cards</span><br>
+          <span class="dim">◌ No streak freeze</span>
+        </div>
+        <a href="#" class="pbtn sec">COMING SOON — APP STORE</a>
+      </div>
+      <div class="pcard featured">
+        <div class="pbadge">MOST POPULAR</div>
+        <div class="ptier">PRO</div>
+        <div class="pprice">$4.99</div>
+        <div class="pperiod">per month — or $29.99/year (save 50%)</div>
+        <div class="pdiv"></div>
+        <div class="pfeat">
+          ✦ Unlimited translations<br>
+          ✦ Unlimited custom vibes<br>
+          ✦ Streak freeze (2/month)<br>
+          ✦ Full share cards — no watermark<br>
+          <span class="highlight">✦ 7-day free trial</span>
+        </div>
+        <a href="#" class="pbtn">TRY PRO FREE — 7 DAYS</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="cta-section">
+  <div class="hero-grid"></div>
+  <div class="status-row" style="justify-content:center;position:relative;">
+    <div class="dot"></div>
+    <span class="status-txt">DROPPING SOON</span>
+  </div>
+  <h2 class="section-title" style="text-align:center;position:relative;margin-bottom:8px;">YOUR WORDS.<br>ANY VIBE.</h2>
+  <p class="section-sub" style="text-align:center;margin:16px auto 32px;position:relative;">Follow us on TikTok and Instagram for daily vibes, challenges, and the launch announcement.</p>
+  <div class="social-btns">
+    <a href="https://tiktok.com/@spekrapp" target="_blank" class="social-btn">▶ FOLLOW ON TIKTOK</a>
+    <a href="https://instagram.com/spekrapp" target="_blank" class="social-btn">◈ FOLLOW ON INSTAGRAM</a>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-brand">SPEKR</div>
+    <div class="footer-tag">// your words. any vibe.</div>
+  </div>
+  <div class="footer-links">
+    <a href="/privacy-policy.html" class="footer-link">PRIVACY POLICY</a>
+    <a href="mailto:privacy@spekr.app" class="footer-link">CONTACT</a>
+    <a href="https://tiktok.com/@spekrapp" target="_blank" class="footer-link">TIKTOK</a>
+    <a href="https://instagram.com/spekrapp" target="_blank" class="footer-link">INSTAGRAM</a>
+  </div>
+</footer>
+
+<script>
+const vibes = [
+  { label:'OUTPUT_GEN_Z', text:"bestie i am literally running on fumes rn no cap 💀 my brain has fully left the chat and i cannot be perceived today fr fr" },
+  { label:'OUTPUT_PASSIVE_AGGRESSIVE', text:"Per my previous communication, I just wanted to circle back and ensure we're aligned on my wellbeing going forward. No worries at all! 🙂" },
+  { label:'OUTPUT_SHAKESPEARE', text:"Hark! Mine weary bones doth cry for respite, and mine addled mind hath fled its post. I prithee, grant me leave from these labours forthwith." },
+  { label:'OUTPUT_CEO', text:"To optimize my performance metrics, I'm strategically reallocating cognitive bandwidth. This isn't a setback — it's a pivot toward sustainable productivity disruption." },
+  { label:'OUTPUT_VILLAIN', text:"FOOL! You dare demand my presence?! My mind has SHATTERED into a thousand pieces and I will NOT be constrained by your pathetic little calendar! MWAHAHAHA." },
+  { label:'OUTPUT_THERAPIST', text:"I'm hearing that your body and mind are sending you some really important signals right now. Let's sit with that exhaustion and explore what it's trying to tell you." },
+  { label:'OUTPUT_TODDLER', text:"i am SO tired and my brain doesn't work and i don't WANT to do anything today pls pls pls can i just rest i'm SO exhausted 🥺" },
+  { label:'OUTPUT_PIRATE', text:"Arr, me weary bones be callin' for shore leave, savvy? Me mind's gone overboard and I can't navigate these treacherous waters without proper rest, ye landlubber!" },
+];
+
+let typing = false;
+
+function typeText(text, el) {
+  el.innerHTML = '';
+  typing = true;
+  let i = 0;
+  const cur = document.createElement('span');
+  cur.className = 'cursor';
+  el.appendChild(cur);
+  const iv = setInterval(() => {
+    if (i < text.length) {
+      el.insertBefore(document.createTextNode(text[i++]), cur);
+    } else {
+      cur.remove();
+      typing = false;
+      clearInterval(iv);
+    }
+  }, 16);
+}
+
+function selectVibe(btn, idx) {
+  if (typing) return;
+  document.querySelectorAll('.vibe-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('rlbl').textContent = vibes[idx].label;
+  typeText(vibes[idx].text, document.getElementById('rtxt'));
+}
+
+typeText(vibes[0].text, document.getElementById('rtxt'));
+</script>
+</body>
+</html>
